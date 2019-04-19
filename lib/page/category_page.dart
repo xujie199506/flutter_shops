@@ -150,6 +150,7 @@ class _rightCategoryNavState extends State<rightCategoryNav> {
   }
 }
 
+//分类页商品列表
 class CatgoryGoods extends StatefulWidget {
   @override
   _CatgoryGoodsState createState() => _CatgoryGoodsState();
