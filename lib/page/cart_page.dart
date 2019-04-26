@@ -1,54 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
-import '../provide/counter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: <Widget>[Mytext(), Mybutton()],
-        ),
-      ),
-    );
-  }
+  _CartPageState createState() => _CartPageState();
 }
 
-class Mybutton extends StatefulWidget {
-  @override
-  _MybuttonState createState() => _MybuttonState();
-}
-
-class _MybuttonState extends State<Mybutton> {
+class _CartPageState extends State<CartPage> {
+  List<String> testList = [];
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: RaisedButton(
-        child: Text("点一下"),
-        onPressed: () {
-          Provide.value<Counter>(context).increment();
-        },
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 400,
+            child: ListView.builder(
+              itemCount: testList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(testList[index]),
+                );
+              },
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {
+              _add();
+            },
+            child: Text('增加'),
+          ),
+          RaisedButton(
+            onPressed: () {
+              _calear();
+            },
+            child: Text('清空'),
+          )
+        ],
       ),
     );
   }
-}
 
-class Mytext extends StatefulWidget {
-  @override
-  _MytextState createState() => _MytextState();
-}
+//增加
+  void _add() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String temp = '许杰是最帅的';
+    testList.add(temp);
+    prefs.setStringList('testInfo', testList);
+    _show();
+  }
 
-class _MytextState extends State<Mytext> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(22),
-      child: Provide<Counter>(
-        builder: (context, child, counter) {
-          return Text('${counter.value}');
-        },
-      ),
-    );
+//查询
+  void _show() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('testInfo') != null) {
+      setState(() {
+        testList = prefs.getStringList('testInfo');
+      });
+    }
+  }
+
+//删除
+  void _calear() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.clear();
+    prefs.remove('testInfo');
+    setState(() {
+      testList = [];
+    });
   }
 }

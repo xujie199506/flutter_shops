@@ -9,6 +9,8 @@ import '../provide/category_goods.dart';
 import 'package:provide/provide.dart';
 import '../model/CateroryGoodsList.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import '../routers/application.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
@@ -284,7 +286,14 @@ class _CatgoryGoodsState extends State<CatgoryGoods> {
             .addGoodsList(cateroryGoodsList.data);
       } else {
         Provide.value<ChilCategory>(context).changenoMoreText("没有更多");
-        print('没有更多了');
+        Fluttertoast.showToast(
+            msg: "已经到底了",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.pink,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     });
   }
@@ -341,7 +350,10 @@ class _CatgoryGoodsState extends State<CatgoryGoods> {
 
   Widget _ListWidght(List newlist, index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Application.router
+            .navigateTo(context, "/detail?id=${newlist[index].goodsId}");
+      },
       child: Container(
         padding: EdgeInsets.only(top: 5, bottom: 5),
         decoration: BoxDecoration(
