@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../routers/application.dart';
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -288,22 +288,22 @@ class LaderPhone extends StatelessWidget {
     return Container(
       child: InkWell(
         onTap: () {
-          // launcherURL();
+          launcherURL();
         },
         child: Image.network(this.laderPitrue),
       ),
     );
   }
 
-  // void launcherURL() async {
-  //   String url = 'tel:' + this.laderPhone;
-  //   if (await canLaunch(url)) {
-  //     print('开始打电话');
-  //     await launch(url);
-  //   } else {
-  //     throw 'url错误';
-  //   }
-  // }
+  void launcherURL() async {
+    String url = 'tel:' + this.laderPhone;
+    if (await canLaunch(url)) {
+      print('开始打电话');
+      await launch(url);
+    } else {
+      throw 'url错误';
+    }
+  }
 }
 
 //商品推荐
