@@ -4,6 +4,7 @@ import '../../model/cartinfo.dart';
 import './cart_count.dart';
 import 'package:provide/provide.dart';
 import '../../provide/CartProvide.dart';
+import '../../routers/application.dart';
 
 class CartItem extends StatelessWidget {
   final CartInfoModel item;
@@ -22,7 +23,7 @@ class CartItem extends StatelessWidget {
         children: <Widget>[
           _cartCheckBt(context, item),
           _cartImage(item),
-          _cardGoodsName(item),
+          _cardGoodsName(context, item),
           _cartPrice(context)
         ],
       ),
@@ -35,7 +36,11 @@ class CartItem extends StatelessWidget {
       child: Checkbox(
         value: item.isCheck,
         activeColor: Colors.pink,
-        onChanged: ((bool val) {}),
+        onChanged: ((bool val) {
+          print(val);
+          item.isCheck = val;
+          Provide.value<CartProvide>(context).changeCheckState(item);
+        }),
       ),
     );
   }
@@ -52,15 +57,21 @@ class CartItem extends StatelessWidget {
     );
   }
 
-  Widget _cardGoodsName(item) {
+  Widget _cardGoodsName(context, item) {
     return Container(
       width: ScreenUtil().setWidth(300),
       padding: EdgeInsets.all(10),
       alignment: Alignment.topLeft,
       child: Column(
         children: <Widget>[
-          Text(item.goodsName),
-          CartConut(),
+          InkWell(
+            onTap: () {
+              Application.router
+                  .navigateTo(context, "/detail?id=${item.goodsId}");
+            },
+            child: Text(item.goodsName),
+          ),
+          CartConut(item),
         ],
       ),
     );

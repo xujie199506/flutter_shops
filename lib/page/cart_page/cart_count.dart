@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
+import '../../provide/CartProvide.dart';
 
 class CartConut extends StatelessWidget {
+  var item;
+  CartConut(this.item);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -11,23 +16,26 @@ class CartConut extends StatelessWidget {
           BoxDecoration(border: Border.all(width: 1, color: Colors.black12)),
       child: Row(
         children: <Widget>[
-          _reduceBtn(),
-          _countArea(),
-          _addBtn(),
+          _reduceBtn(item, context),
+          _countArea(item),
+          _addBtn(item, context),
         ],
       ),
     );
   }
 
   //减少按钮
-  Widget _reduceBtn() {
+  Widget _reduceBtn(item, context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Provide.value<CartProvide>(context).addorReduceAction(item, 'reduce');
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),
         alignment: Alignment.center,
         decoration: BoxDecoration(
+            color: item.count > 1 ? Colors.white : Colors.black12,
             border: Border(right: BorderSide(width: 1, color: Colors.black12))),
         child: Text('-'),
       ),
@@ -35,9 +43,11 @@ class CartConut extends StatelessWidget {
   }
 
   //减少按钮
-  Widget _addBtn() {
+  Widget _addBtn(item, context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Provide.value<CartProvide>(context).addorReduceAction(item, 'add');
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),
@@ -50,13 +60,13 @@ class CartConut extends StatelessWidget {
   }
 
   //显示区域
-  Widget _countArea() {
+  Widget _countArea(item) {
     return Container(
       width: ScreenUtil().setWidth(70),
       height: ScreenUtil().setHeight(45),
       alignment: Alignment.center,
       color: Colors.white,
-      child: Text('1'),
+      child: Text('${item.count}'),
     );
   }
 }
